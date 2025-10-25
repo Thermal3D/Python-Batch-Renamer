@@ -1,1 +1,1 @@
-Just paste the folder location and enter the name you wanted the files to be called.
+Just paste the folder location and enter the name you want the files to be called.
