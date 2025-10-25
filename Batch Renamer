@@ -1,0 +1,49 @@
+import os
+
+def bulk_rename_images(folder_path, base_name="image", start_index=1, digits=3):
+    """
+    Renames all image files in the given folder.
+
+    Args:
+        folder_path (str): Path to the folder containing images.
+        base_name (str): New base name for all images.
+        start_index (int): Starting number for renamed files.
+        digits (int): Number of digits for numbering (e.g., 3 -> 001, 002...).
+    """
+
+    # Supported image file types
+    valid_extensions = {'.jpg', '.jpeg', '.png', '.bmp', '.tiff', '.gif', '.webp'}
+
+    # Get all files in folder
+    files = sorted(os.listdir(folder_path))
+    image_files = [f for f in files if os.path.splitext(f)[1].lower() in valid_extensions]
+
+    if not image_files:
+        print("No image files found in this folder.")
+        return
+
+    # Rename each image
+    counter = start_index
+    for filename in image_files:
+        old_path = os.path.join(folder_path, filename)
+        ext = os.path.splitext(filename)[1]
+        new_filename = f"{base_name}_{str(counter).zfill(digits)}{ext}"
+        new_path = os.path.join(folder_path, new_filename)
+
+        # Avoid overwriting
+        if os.path.exists(new_path):
+            print(f"⚠️ Skipping {filename} -> {new_filename} (already exists)")
+            continue
+
+        os.rename(old_path, new_path)
+        print(f"✅ Renamed: {filename} -> {new_filename}")
+        counter += 1
+
+    print("\nAll done!")
+
+
+if __name__ == "__main__":
+    # Example usage:
+    folder = input("Enter the folder path: ").strip('"')
+    base = input("Enter base name (default 'image'): ") or "image"
+    bulk_rename_images(folder, base_name=base)
